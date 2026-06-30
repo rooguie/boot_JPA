@@ -4,6 +4,8 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+#이미 올라간 경우라 기본 캐시를 없애고 다시 올리기
+application.properties
 
 ### STS ###
 .apt_generated
