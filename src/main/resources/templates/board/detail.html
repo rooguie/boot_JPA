@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content" class="container-md" th:each="board : ${board}">
+    <!-- 여기가 main -->
+
+    <!--/board/register.html-->
+    <h1>Board Detail Page</h1>
+    <form action="/board/update" method="post" id="modForm" >
+        <input type="hidden" name="bno" th:value="${board.bno}" />
+        <div class="mb-3">
+            <label for="t" class="form-label">Title</label>
+            <input type="text" id="t" class="form-control" name="title"  th:value="${board.title}" readonly="readonly" >
+        </div>
+        <div class="mb-3">
+            <label for="w" class="form-label">Writer</label>
+            <input type="text" id="w" class="form-control" name="writer" th:value="${board.writer}" readonly="readonly" >
+        </div>
+        <div class="mb-3">
+            <label for="c" class="form-label">Content</label>
+            <textarea cols="10" rows="20" type="text" id="c" class="form-control" name="content"
+                     th:text="${board.content}" readonly="readonly"></textarea>
+        </div>
+    조회수:[[${board.readCount}]]
+    댓글 수:[[${board.cmtQty}]]
+    등록일:[[${#strings.substring(board.regDate, 0, 10)}]]
+
+    </form>
+
+
+    <button type="button" id="modBtn">modify</button>
+
+    <a th:href="@{/board/remove(bno=${board.bno})}"><button type="button" id="delBtn">delete</button></a>
+
+    <a th:href="@{/board/list}"><button type="button" id="listBtn">list</button></a>
+
+    <script th:src="@{/js/boardModify.js}"></script>
+
+</div>
+</html>

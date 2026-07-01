@@ -4,26 +4,98 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
-<div layout:fragment="content" class="container-md">
-    <!-- 여기가 main -->
-    <!--/board/register.html-->
-    <h1>Board Register Page</h1>
-    <form action="/board/register" method="post">
-        <div class="mb-3">
-            <label for="t" class="form-label">Title</label>
-            <input type="text" id="t" class="form-control" name="title" placeholder="title...">
-        </div>
-        <div class="mb-3">
-            <label for="w" class="form-label">Writer</label>
-            <input type="text" id="w" class="form-control" name="writer" placeholder="writer...">
-        </div>
-        <div class="mb-3">
-            <label for="c" class="form-label">Content</label>
-            <textarea cols="10" rows="20" type="text" id="c" class="form-control" name="content"
-                      placeholder="content"></textarea>
-        </div>
-        <button type="submit">등록</button>
-    </form>
+<th:block layout:fragment="css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* 은은한 라이트 그레이 배경 */
+        }
+        .modern-header {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.5px;
+        }
+        .modern-card {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            border-radius: 16px; /* 부드럽고 둥근 모서리 */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modern-card:hover {
+            transform: translateY(-4px); /* 위로 부드럽게 떠오르는 효과 */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.07), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .btn-modern {
+            background: linear-gradient(135deg, #4f46e5, #6366f1); /* 세련된 인디고 그라데이션 */
+            color: white;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            transition: opacity 0.2s;
+            width: 100%; /* 모바일 및 모던 폼 대응을 위해 가로 100% 적용 */
+        }
+        .btn-modern:hover {
+            opacity: 0.9;
+            color: white;
+        }
+        .text-main {
+            color: #0f172a;
+            font-weight: 600;
+        }
+        .text-sub {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        .info-badge {
+            background-color: #f1f5f9;
+            color: #475569;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* 폼 요소 포커스 시 부드러운 인디고 컬러 보더 적용 */
+        .form-control:focus {
+            border-color: #a5b4fc;
+            box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25);
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content" class="container-md pt-5" style="max-width: 600px;">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="modern-header m-0">Board Register</h1>
+        <span class="info-badge">새 글 작성</span>
+    </div>
+
+    <div class="modern-card p-4 p-md-5">
+        <form th:action="@{/board/register}" method="post">
+
+            <div class="mb-4">
+                <label for="t" class="form-label text-main">Title</label>
+                <input type="text" id="t" class="form-control p-3 text-sub" name="title" placeholder="제목을 입력하세요" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="w" class="form-label text-main">Writer</label>
+                <input type="text" id="w" class="form-control p-3 text-sub" name="writer" placeholder="작성자 이름을 입력하세요" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="c" class="form-label text-main">Content</label>
+                <textarea rows="10" id="c" class="form-control p-3 text-sub" name="content" placeholder="내용을 입력해 주세요..." required></textarea>
+            </div>
+
+            <div class="mt-5">
+                <button type="submit" class="btn-modern">등록하기</button>
+            </div>
+
+        </form>
+    </div>
 
 </div>
 </html>

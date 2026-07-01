@@ -46,4 +46,10 @@ public interface BoardService {
     Long insert(BoardDTO boardDTO);
 
     List<BoardDTO> getList();
+
+    BoardDTO getDetail(Long bno);
+
+    void update(BoardDTO boardDTO);
+
+    void remove(Long bno);
 }

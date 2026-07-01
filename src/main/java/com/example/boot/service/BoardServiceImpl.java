@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -22,7 +23,7 @@ public class BoardServiceImpl implements BoardService {
         // save(): 저장
         // 저장하는 객체는 Entity(Board)
         Board board = convertDtoToEntity(boardDTO);
-        Long bno=boardRepository.save(board).getBno(); //저장 후 bno 가져가기
+        Long bno = boardRepository.save(board).getBno(); //저장 후 bno 가져가기
 
         return bno;
     }
@@ -34,7 +35,7 @@ public class BoardServiceImpl implements BoardService {
         // 정렬: Sort.by(Sort.drection.DESC, "정렬기준 칼럼명")
         // DB에서 가져오는 return List<Board> => List<BoardDTO> 변환
         List<Board> boardList = boardRepository.findAll(
-                Sort.by(Sort.Direction.DESC,"bno")
+                Sort.by(Sort.Direction.DESC, "bno")
         );
         List<BoardDTO> boardDTOList = boardList
                 .stream()
@@ -42,5 +43,59 @@ public class BoardServiceImpl implements BoardService {
 //                .map(this :: convertEntityToDto)
                 .toList();
         return boardDTOList;
+    }
+
+    @Override
+    public BoardDTO getDetail(Long bno) {
+        // findOne => 기본키를 이용하여 원하는 객체 검색 where bno
+        // findBy 칼럼명 => 원하는 칼럼명을 이용하여 검색
+        // findById => findOne과 같은 의미
+        // Optional<T> : nullPointException이 발생하지 않도록 도와줌
+        // Optional.isEmpty(): null이면 true / false
+        // Optional.isPresent(): 값이 있는지 없는지 확인 true / false
+        // Optional.get(): 객체 가져오기
+        Optional<Board> optional = boardRepository.findById(bno);
+        if (optional.isPresent()) {
+            Board board = optional.get();
+            board.setReadCount(board.getReadCount()+1);
+
+            // 조회수 올리기 readCount+1
+            // update board set read_count = read_count+1 where bno = bno
+            // save()
+            // 변경된 객체로 객체를 수정 => 저장
+
+            boardRepository.save(board);
+
+            BoardDTO boardDTO = convertEntityToDto(board);
+
+            return boardDTO;
+
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void update(BoardDTO boardDTO) {
+        // update 기능은 없음
+        // update 할 Board 객체를 잘 만든 다음 save()
+        // findById 객체를 가져와서 => 내 객체의 변경값만 수정 => save() => 연속성이 무너지는 것을 방지
+        Optional<Board> optional = boardRepository.findById(boardDTO.getBno());
+        if(optional.isPresent()){
+            Board board = optional.get(); //내 객체
+            board.setTitle(boardDTO.getTitle());
+            board.setContent(boardDTO.getContent());
+            board.setReadCount(board.getReadCount()-1);
+
+            boardRepository.save(board);
+        }
+    }
+
+    @Override
+    public void remove(Long bno) {
+        Optional<Board> optional = boardRepository.findById((bno));
+        if(optional.isPresent()){
+            boardRepository.deleteById(bno);
+        }
     }
 }
